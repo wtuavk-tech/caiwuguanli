@@ -9,7 +9,8 @@ import {
   Plus,
   FileSpreadsheet,
   History,
-  Activity
+  Activity,
+  ImageIcon
 } from 'lucide-react';
 
 // --- 类型定义 ---
@@ -32,7 +33,7 @@ const TAB_CONFIGS: Record<TabType, { search: string[], headers: string[], hideTa
   },
   '报销申请': {
     search: ['报销单编号', '公司', '部门', '事项', '申请用户', '申请时间', '入账时间', '状态'],
-    headers: ['报销单编号', '申请时间', '申请人', 'UID', '状态', '公司', '部门', '事项', '金额', '本金', '佣金', '核销券码/订单编号', '备注', '物品类型', '物品名称', '物品数量', '统一社会信用代码', '订单号', '发票', '进补凭证', '审核时间', '主管审核', '审核意见', '入账时间', '财务审核', '入账意见', '撤销原因', '撤销时间']
+    headers: ['报销单编号', '申请时间', '申请人', 'UID', '状态', '公司', '部门', '事项', '金额', '报销凭证', '本金', '佣金', '核销券码/订单编号', '备注', '物品类型', '物品名称', '物品数量', '统一社会信用代码', '订单号', '发票', '进补凭证', '审核时间', '主管审核', '审核意见', '入账时间', '财务审核', '入账意见', '撤销原因', '撤销时间']
   },
   '订单垫付': {
     search: ['订单号', '申请人', '补款渠道', '申请时间', '出库时间', '审批状态', '出库状态'],
@@ -90,6 +91,7 @@ const generateRows = (tab: TabType): any[] => {
       else if (h.includes('人') || h.includes('员') || h.includes('出纳') || h.includes('主管') || h.includes('财务')) row[h] = i % 2 === 0 ? '管理员' : '陈清平';
       else if (h.includes('状态')) row[h] = i % 3 === 0 ? '已入账' : (i % 3 === 1 ? '待审批' : '出库成功');
       else if (h.includes('编号') || h.includes('单号') || h.includes('UID')) row[h] = 'BXD' + (2025121800 + i);
+      else if (h === '报销凭证') row[h] = '查看凭证(4)';
       else if (h.includes('发票') || h.includes('凭证')) row[h] = i % 4 === 0 ? '无' : '查看(1)';
       else row[h] = '--';
     });
@@ -133,7 +135,7 @@ const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t
   );
 };
 
-const DataOverview = () => (
+const DataOverview = ({ onToggleSearch }: { onToggleSearch: () => void }) => (
   <div className="bg-[#f0f7ff] rounded-lg border border-[#d9d9d9] overflow-hidden flex items-center shadow-sm h-12 mb-2">
     <div className="flex items-center gap-3 px-4 flex-1">
       <div className="flex items-center gap-2 mr-8 shrink-0">
@@ -149,19 +151,20 @@ const DataOverview = () => (
         ))}
       </div>
     </div>
-    <div className="h-full px-5 bg-[#e6f7ff] border-l border-[#d9d9d9] flex items-center gap-2 text-[#1890ff] font-medium text-xs">
+    <div 
+      onClick={onToggleSearch}
+      className="h-full px-5 bg-[#e6f7ff] border-l border-[#d9d9d9] flex items-center gap-2 text-[#1890ff] font-medium text-xs cursor-pointer hover:bg-blue-100 transition-colors"
+    >
       <Search size={14} />
       <span>点这高级筛选</span>
     </div>
   </div>
 );
 
-const SearchPanel = ({ tab }: { tab: TabType }) => {
+const SearchPanel = ({ tab, isVisible }: { tab: TabType, isVisible: boolean }) => {
   const config = TAB_CONFIGS[tab];
-  if (config.search.length === 0) return null;
-
-  const firstFive = config.search.slice(0, 5);
-  const others = config.search.slice(5);
+  if (!isVisible && tab !== '资产管理') return null;
+  if (config.search.length === 0 && tab !== '资产管理') return null;
 
   const renderField = (field: string) => (
     <div key={field} className="flex items-center gap-2 min-w-[200px]">
@@ -181,17 +184,27 @@ const SearchPanel = ({ tab }: { tab: TabType }) => {
   return (
     <div className="bg-white p-4 border border-slate-200 rounded-lg shadow-sm mb-2">
       <div className="flex flex-wrap gap-x-6 gap-y-3 items-center">
-        {/* 前5个筛选项 */}
-        {firstFive.map(renderField)}
+        {config.search.map(renderField)}
         
-        {/* 操作按钮 */}
-        <div className="flex gap-2">
-          <button className="h-7 px-4 bg-[#1890ff] text-white rounded text-[11px] hover:bg-blue-600">搜索</button>
-          <button className="h-7 px-4 bg-white border border-slate-200 text-slate-600 rounded text-[11px] hover:bg-slate-50">重置</button>
-        </div>
+        {/* 操作按钮区：紧跟在筛选项后面 */}
+        <div className="flex items-center gap-2 border-l border-slate-200 pl-4 ml-2">
+          <button className="h-7 px-4 bg-[#1890ff] text-white rounded text-[11px] hover:bg-blue-600 transition-colors">搜索</button>
+          <button className="h-7 px-4 bg-white border border-slate-200 text-slate-600 rounded text-[11px] hover:bg-slate-50 transition-colors">重置</button>
+          
+          <div className="w-[1px] h-4 bg-slate-200 mx-2"></div>
 
-        {/* 剩余项跟在重置按钮之后 */}
-        {others.map(renderField)}
+          <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+            <Plus size={14}/> 新增
+          </button>
+          <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+            <FileSpreadsheet size={14}/> 导出
+          </button>
+          {tab === '报销补款' && (
+            <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+              <History size={14}/> 补款记录
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -200,6 +213,7 @@ const SearchPanel = ({ tab }: { tab: TabType }) => {
 const App = () => {
   const [activeTab, setActiveTab] = useState<TabType>('报销申请');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pageSize = 20;
 
   const config = TAB_CONFIGS[activeTab];
@@ -209,17 +223,11 @@ const App = () => {
     <div className="h-screen bg-[#f8fafc] p-3 flex flex-col overflow-hidden font-sans text-slate-800">
       <NotificationBar />
       <TabSelector activeTab={activeTab} onSelect={(t) => { setActiveTab(t); setCurrentPage(1); }} />
-      <DataOverview />
-      <SearchPanel tab={activeTab} />
+      <DataOverview onToggleSearch={() => setIsSearchOpen(!isSearchOpen)} />
+      <SearchPanel tab={activeTab} isVisible={isSearchOpen} />
       
       {!config.hideTable && (
         <>
-          <div className="flex gap-2 mb-2">
-            <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600"><Plus size={14}/> 新增</button>
-            <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600"><FileSpreadsheet size={14}/> 导出</button>
-            {activeTab === '报销补款' && <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600"><History size={14}/> 补款记录</button>}
-          </div>
-
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden">
             <div className="overflow-auto flex-1">
               <table className="w-full text-left border-collapse min-w-[2400px]">
@@ -240,8 +248,41 @@ const App = () => {
                     >
                       <td className="px-3 py-1 text-center border-r border-slate-100">{(currentPage - 1) * pageSize + idx + 1}</td>
                       {config.headers.map(h => (
-                        <td key={h} className={`px-3 py-1 border-r border-slate-100 truncate max-w-[200px] ${h.includes('金额') ? 'text-right font-mono' : ''}`}>
-                          {row[h]}
+                        <td key={h} className={`px-3 py-1 border-r border-slate-100 max-w-[200px] ${h !== '报销凭证' ? 'truncate' : ''} ${h.includes('金额') ? 'text-right font-mono' : ''}`}>
+                          {h === '报销凭证' ? (
+                            <div className="relative group cursor-pointer flex items-center gap-1 text-[#1890ff]">
+                              <ImageIcon size={14} />
+                              <span>{row[h]}</span>
+                              {/* 悬停预览图 - idx < 4 时使用 top-0 确保不被表头挡住，且向下展示完整内容 */}
+                              <div className={`absolute left-full ml-4 ${idx < 4 ? 'top-0 translate-y-0' : 'top-1/2 -translate-y-1/2'} z-[100] hidden group-hover:block p-4 bg-white border border-slate-200 rounded-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[640px]`}>
+                                <div className="mb-3 flex items-center justify-between border-b pb-2 border-slate-100">
+                                  <div className="flex flex-col">
+                                    <span className="text-[13px] font-bold text-slate-800">报销凭证详情预览</span>
+                                    <span className="text-[10px] text-slate-400">单号: {row['报销单编号']}</span>
+                                  </div>
+                                  <div className="bg-blue-50 text-[#1890ff] px-2 py-0.5 rounded text-[10px] font-medium">共 4 张图片</div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-3">
+                                  {[1, 2, 3, 4].map(num => (
+                                    <div key={num} className="relative group/img overflow-hidden rounded-lg border border-slate-100 shadow-sm bg-slate-50 aspect-[4/3]">
+                                      <img 
+                                        src={`https://picsum.photos/seed/${idx + 50 + num}/400/300`} 
+                                        alt={`凭证图片 ${num}`} 
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
+                                      />
+                                      <div className="absolute bottom-1 right-1 bg-black/50 backdrop-blur-sm text-[9px] text-white px-1.5 py-0.5 rounded-md">图 {num}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="mt-3 pt-2 border-t border-slate-50 text-[10px] text-center text-slate-400 font-medium flex items-center justify-center gap-1">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                                  <span>凭证图片预览中 - 请确保所有材料真实有效</span>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            row[h]
+                          )}
                         </td>
                       ))}
                       <td className={`px-3 py-1 text-center sticky right-0 group-hover:bg-blue-50/40 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${idx % 2 === 1 ? 'bg-[#f8fcff]' : 'bg-white'}`}>

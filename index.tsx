@@ -10,7 +10,9 @@ import {
   FileSpreadsheet,
   History,
   Activity,
-  ImageIcon
+  ImageIcon,
+  Megaphone,
+  Flame
 } from 'lucide-react';
 
 // --- 类型定义 ---
@@ -102,35 +104,66 @@ const generateRows = (tab: TabType): any[] => {
 // --- 子组件 ---
 
 const NotificationBar = () => (
-  <div className="flex items-center gap-4 mb-2 px-4 py-2 bg-[#fff7e6] border border-[#ffd591] rounded-lg shadow-sm overflow-hidden shrink-0">
-    <div className="flex items-center gap-2 text-[#d46b08] shrink-0">
-      <Bell size={14} className="animate-pulse" />
-      <span className="text-xs font-bold">系统公告</span>
+  <div className="flex items-center justify-between mb-4 px-4 py-2 bg-[#0f172a] rounded-lg shadow-md shrink-0 h-12">
+    <div className="flex items-center gap-3 shrink-0">
+      <span className="bg-[#ef4444] text-white text-[12px] font-bold px-2 py-1 rounded">重要公告</span>
+      <Bell size={16} className="text-slate-300" />
     </div>
-    <div className="flex-1 overflow-hidden relative h-5 flex items-center">
-      <div className="whitespace-nowrap animate-[marquee_30s_linear_infinite] flex items-center gap-8 text-[11px] text-[#d46b08]">
-        <span>📢 欢迎使用业务订单管理系统，系统将于今晚进行常规维护。请各位同事提前保存数据，避免影响报销流程。</span>
+    <div className="flex-1 overflow-hidden relative h-6 flex items-center mx-4">
+      <div className="whitespace-nowrap animate-[marquee_30s_linear_infinite] flex items-center gap-12 text-[13px] text-slate-200 font-medium">
+        <span className="flex items-center gap-2">
+          <Megaphone size={14} className="text-white"/> 
+          关于 2025 年度秋季职业晋升评审的通知: 点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。
+        </span>
+        <span className="flex items-center gap-2">
+          <Flame size={14} className="text-orange-400"/>
+          界面优化: 系统视觉风格已全面升级，如有问题请联系管理员。
+        </span>
       </div>
+    </div>
+    <div className="bg-slate-800 text-slate-400 text-[11px] font-mono px-2 py-1 rounded border border-slate-700">
+      2025-11-19
     </div>
     <style>{`@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }`}</style>
   </div>
 );
 
+// Tab Color Definitions
+const TAB_COLORS = [
+  { name: 'red',    bg: 'bg-[#ef4444]', lightBg: 'bg-red-50',    border: 'border-red-500',    text: 'text-[#ef4444]' },
+  { name: 'amber',  bg: 'bg-[#f59e0b]', lightBg: 'bg-amber-50',  border: 'border-amber-500',  text: 'text-[#f59e0b]' },
+  { name: 'blue',   bg: 'bg-[#3b82f6]', lightBg: 'bg-blue-50',   border: 'border-blue-500',   text: 'text-[#3b82f6]' },
+  { name: 'lime',   bg: 'bg-[#84cc16]', lightBg: 'bg-lime-50',   border: 'border-lime-500',   text: 'text-[#84cc16]' },
+  { name: 'cyan',   bg: 'bg-[#06b6d4]', lightBg: 'bg-cyan-50',   border: 'border-cyan-500',   text: 'text-[#06b6d4]' },
+  { name: 'purple', bg: 'bg-[#a855f7]', lightBg: 'bg-purple-50', border: 'border-purple-500', text: 'text-[#a855f7]' },
+  { name: 'rose',   bg: 'bg-[#f43f5e]', lightBg: 'bg-rose-50',   border: 'border-rose-500',   text: 'text-[#f43f5e]' },
+];
+
 const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t: TabType) => void }) => {
   const tabs: TabType[] = ['报销补款', '报销申请', '订单垫付', '提现申请', '预支申请', '还款申请', '预支账单', '财务收支', '发票管理', '银账查询财务', '银账查询业务员', '资产管理'];
+  
   return (
-    <div className="grid grid-cols-6 gap-1 mb-2">
-      {tabs.map((tab) => (
-        <button
-          key={tab}
-          onClick={() => onSelect(tab)}
-          className={`h-9 border border-slate-300 rounded-lg text-[12px] transition-all flex items-center justify-center px-2 text-center break-all leading-tight ${
-            activeTab === tab ? 'bg-[#1890ff] text-white border-[#1890ff] shadow-sm' : 'bg-white text-slate-600 hover:border-blue-400 hover:text-blue-500'
-          }`}
-        >
-          {tab}
-        </button>
-      ))}
+    <div className="grid grid-cols-6 gap-3 mb-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+      {tabs.map((tab, idx) => {
+        const theme = TAB_COLORS[idx % TAB_COLORS.length];
+        const isActive = activeTab === tab;
+        
+        return (
+          <button
+            key={tab}
+            onClick={() => onSelect(tab)}
+            className={`
+              h-10 rounded-lg text-[13px] font-bold transition-all flex items-center justify-center px-2 text-center break-all leading-tight shadow-sm
+              ${isActive 
+                ? `${theme.bg} text-white border-transparent shadow-md transform scale-[1.02]` 
+                : `${theme.lightBg} ${theme.text} ${theme.border} border bg-opacity-60 hover:bg-opacity-100`
+              }
+            `}
+          >
+            {tab}
+          </button>
+        );
+      })}
     </div>
   );
 };

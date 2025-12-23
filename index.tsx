@@ -155,24 +155,12 @@ const NotificationBar = () => (
   </div>
 );
 
-// Tab Color Definitions
-const TAB_COLORS = [
-  { name: 'red',    bg: 'bg-[#ef4444]', lightBg: 'bg-red-50',    border: 'border-red-500',    text: 'text-[#ef4444]' },
-  { name: 'amber',  bg: 'bg-[#f59e0b]', lightBg: 'bg-amber-50',  border: 'border-amber-500',  text: 'text-[#f59e0b]' },
-  { name: 'blue',   bg: 'bg-[#3b82f6]', lightBg: 'bg-blue-50',   border: 'border-blue-500',   text: 'text-[#3b82f6]' },
-  { name: 'lime',   bg: 'bg-[#84cc16]', lightBg: 'bg-lime-50',   border: 'border-lime-500',   text: 'text-[#84cc16]' },
-  { name: 'cyan',   bg: 'bg-[#06b6d4]', lightBg: 'bg-cyan-50',   border: 'border-cyan-500',   text: 'text-[#06b6d4]' },
-  { name: 'purple', bg: 'bg-[#a855f7]', lightBg: 'bg-purple-50', border: 'border-purple-500', text: 'text-[#a855f7]' },
-  { name: 'rose',   bg: 'bg-[#f43f5e]', lightBg: 'bg-rose-50',   border: 'border-rose-500',   text: 'text-[#f43f5e]' },
-];
-
 const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t: TabType) => void }) => {
   const tabs: TabType[] = ['报销补款', '报销申请', '订单垫付', '提现申请', '预支申请', '还款申请', '预支账单', '财务收支', '发票管理', '银账查询财务', '银账查询业务员', '资产管理'];
   
   return (
     <div className="grid grid-cols-6 gap-3 mb-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
-      {tabs.map((tab, idx) => {
-        const theme = TAB_COLORS[idx % TAB_COLORS.length];
+      {tabs.map((tab) => {
         const isActive = activeTab === tab;
         
         return (
@@ -180,10 +168,10 @@ const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t
             key={tab}
             onClick={() => onSelect(tab)}
             className={`
-              h-10 rounded-lg text-[13px] font-bold transition-all flex items-center justify-center px-2 text-center break-all leading-tight shadow-sm
+              h-8 rounded-lg text-[13px] font-bold transition-all flex items-center justify-center px-2 text-center break-all leading-tight shadow-sm border
               ${isActive 
-                ? `${theme.bg} text-white border-transparent shadow-md transform scale-[1.02]` 
-                : `${theme.lightBg} ${theme.text} ${theme.border} border bg-opacity-60 hover:bg-opacity-100`
+                ? `bg-[#1890ff] text-white border-transparent shadow-md transform scale-[1.02]` 
+                : `bg-[#F0F9FE] text-[#1890ff] border-[#91caff] hover:bg-blue-100` 
               }
             `}
           >
@@ -379,7 +367,7 @@ const App = () => {
       <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden">
         <div className="overflow-auto flex-1">
           <table className="w-full text-left border-collapse min-w-[1800px]">
-            <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200">
+            <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
               <tr className="text-[11px] font-bold text-slate-500">
                 <th className="px-3 py-3 border-r border-slate-100 text-center w-12">序号</th>
                 <th className="px-3 py-3 border-r border-slate-100">资产编号</th>
@@ -401,9 +389,9 @@ const App = () => {
                 <th className="px-3 py-3 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)]">操作</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {assetLedgerData.map((row, idx) => (
-                <tr key={row.id} className={`text-[11px] text-slate-600 h-10 hover:bg-blue-50/40 transition-colors ${row.isRedRow ? 'bg-red-300 bg-opacity-50' : (idx % 2 === 1 ? 'bg-slate-50' : 'bg-white')}`}>
+                <tr key={row.id} className={`text-[11px] text-slate-600 h-10 border-b border-slate-300 hover:bg-blue-50/40 transition-colors ${row.isRedRow ? 'bg-red-300 bg-opacity-50' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')}`}>
                   <td className="px-3 py-1 text-center border-r border-slate-100">{row.id}</td>
                   <td className="px-3 py-1 border-r border-slate-100">{row.assetNo}</td>
                   <td className="px-3 py-1 border-r border-slate-100">{row.assetName}</td>
@@ -438,7 +426,7 @@ const App = () => {
                   <td className="px-3 py-1 border-r border-slate-100"></td>
                   <td className="px-3 py-1 border-r border-slate-100">{row.remarks}</td>
                   <td className="px-3 py-1 border-r border-slate-100">{row.entryTime}</td>
-                  <td className={`px-3 py-1 text-center sticky right-0 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${row.isRedRow ? 'bg-red-300 bg-opacity-0' : (idx % 2 === 1 ? 'bg-slate-50' : 'bg-white')}`}>
+                  <td className={`px-3 py-1 text-center sticky right-0 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${row.isRedRow ? 'bg-red-300 bg-opacity-0' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')}`}>
                     <div className="flex justify-center gap-2 text-[#1890ff]">
                       <button className="hover:underline">修改</button>
                       <button className="hover:underline">领用</button>
@@ -533,7 +521,7 @@ const App = () => {
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden">
             <div className="overflow-auto flex-1">
               <table className="w-full text-left border-collapse min-w-[2400px]">
-                <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200">
+                <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
                   <tr className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                     <th className="px-3 py-3 text-center w-14 border-r border-slate-100">序号</th>
                     {config.headers.map(h => (
@@ -542,11 +530,11 @@ const App = () => {
                     <th className="px-3 py-3 w-32 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)]">操作</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody>
                   {data.map((row, idx) => (
                     <tr 
                       key={idx} 
-                      className={`hover:bg-blue-50/40 transition-colors text-[11px] text-slate-600 h-11 ${idx % 2 === 1 ? 'bg-blue-50/50' : 'bg-white'}`}
+                      className={`hover:bg-blue-50/40 transition-colors text-[11px] text-slate-600 h-11 border-b border-slate-300 ${idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white'}`}
                     >
                       <td className="px-3 py-1 text-center border-r border-slate-100">{(currentPage - 1) * pageSize + idx + 1}</td>
                       {config.headers.map(h => (

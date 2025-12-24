@@ -133,11 +133,11 @@ const generateAssetLedgerData = () => {
 const NotificationBar = () => (
   <div className="flex items-center justify-between mb-4 px-4 py-2 bg-[#0f172a] rounded-lg shadow-md shrink-0 h-12">
     <div className="flex items-center gap-3 shrink-0">
-      <span className="bg-[#ef4444] text-white text-[12px] font-bold px-2 py-1 rounded">重要公告</span>
+      <span className="bg-[#ef4444] text-white text-[12px] font-bold px-2 py-1 rounded font-sans">重要公告</span>
       <Bell size={16} className="text-slate-300" />
     </div>
     <div className="flex-1 overflow-hidden relative h-6 flex items-center mx-4">
-      <div className="whitespace-nowrap animate-[marquee_30s_linear_infinite] flex items-center gap-12 text-[13px] text-slate-200 font-medium">
+      <div className="whitespace-nowrap animate-[marquee_30s_linear_infinite] flex items-center gap-12 text-[13px] text-slate-200 font-medium font-sans">
         <span className="flex items-center gap-2">
           <Megaphone size={14} className="text-white"/> 
           关于 2025 年度秋季职业晋升评审的通知: 点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。
@@ -168,7 +168,7 @@ const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t
             key={tab}
             onClick={() => onSelect(tab)}
             className={`
-              h-8 rounded-lg text-[13px] font-bold transition-all flex items-center justify-center px-2 text-center break-all leading-tight shadow-sm border
+              h-8 rounded-lg text-[13px] font-bold font-sans transition-all flex items-center justify-center px-2 text-center break-all leading-tight shadow-sm border
               ${isActive 
                 ? `bg-[#1890ff] text-white border-transparent shadow-md transform scale-[1.02]` 
                 : `bg-[#F0F9FE] text-[#1890ff] border-[#91caff] hover:bg-blue-100` 
@@ -200,14 +200,14 @@ const DataOverview = ({
         <div className="flex gap-4">
            <button 
              onClick={() => setAssetSubTab('overview')}
-             className={`text-sm font-bold relative h-12 px-2 flex items-center ${assetSubTab === 'overview' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
+             className={`text-sm font-bold font-sans relative h-12 px-2 flex items-center ${assetSubTab === 'overview' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
            >
              资产总览
              {assetSubTab === 'overview' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#1890ff]"></div>}
            </button>
            <button 
              onClick={() => setAssetSubTab('ledger')}
-             className={`text-sm font-bold relative h-12 px-2 flex items-center ${assetSubTab === 'ledger' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
+             className={`text-sm font-bold font-sans relative h-12 px-2 flex items-center ${assetSubTab === 'ledger' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
            >
              资产台账
              {assetSubTab === 'ledger' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#1890ff]"></div>}
@@ -217,12 +217,12 @@ const DataOverview = ({
         <>
           <div className="flex items-center gap-2 mr-8 shrink-0">
             <Activity size={18} className="text-[#1890ff]" />
-            <span className="text-sm font-bold text-[#003a8c]">数据概览</span>
+            <span className="text-sm font-bold font-sans text-[#003a8c]">数据概览</span>
           </div>
           <div className="flex gap-12">
             {[['待审核数', '12', '#262626'], ['今日已审核', '45', '#262626'], ['当月已审核', '892', '#52c41a'], ['当年已审核', '12540', '#f5222d']].map(([label, val, color]) => (
               <div key={label} className="flex items-center gap-1.5">
-                <span className="text-[12px] text-[#8c8c8c]">{label}:</span>
+                <span className="text-[12px] text-[#8c8c8c] font-sans">{label}:</span>
                 <span className="text-base font-bold font-mono" style={{ color }}>{val}</span>
               </div>
             ))}
@@ -232,7 +232,7 @@ const DataOverview = ({
     </div>
     <div 
       onClick={onToggleSearch}
-      className="h-full px-5 bg-[#e6f7ff] border-l border-[#d9d9d9] flex items-center gap-2 text-[#1890ff] font-medium text-xs cursor-pointer hover:bg-blue-100 transition-colors"
+      className="h-full px-5 bg-[#e6f7ff] border-l border-[#d9d9d9] flex items-center gap-2 text-[#1890ff] font-medium text-xs font-sans cursor-pointer hover:bg-blue-100 transition-colors"
     >
       <Search size={14} />
       <span>点这高级筛选</span>
@@ -248,15 +248,15 @@ const SearchPanel = ({ tab, isVisible }: { tab: TabType, isVisible: boolean }) =
 
   const renderField = (field: string) => (
     <div key={field} className="flex items-center gap-2 min-w-[200px]">
-      <span className="text-[11px] text-slate-500 shrink-0 whitespace-nowrap">{field}</span>
+      <span className="text-[11px] text-slate-500 shrink-0 whitespace-nowrap font-sans">{field}</span>
       {field.includes('时间') || field.includes('日期') ? (
         <div className="flex items-center gap-1 flex-1">
-          <input type="date" className="flex-1 border border-slate-200 rounded h-7 px-1 text-[10px] outline-none" />
+          <input type="date" className="flex-1 border border-slate-200 rounded h-7 px-1 text-[10px] outline-none font-mono" />
           <span className="text-slate-300">至</span>
-          <input type="date" className="flex-1 border border-slate-200 rounded h-7 px-1 text-[10px] outline-none" />
+          <input type="date" className="flex-1 border border-slate-200 rounded h-7 px-1 text-[10px] outline-none font-mono" />
         </div>
       ) : (
-        <input type="text" placeholder="请输入内容" className="flex-1 border border-slate-200 rounded h-7 px-2 text-[11px] outline-none focus:border-blue-400" />
+        <input type="text" placeholder="请输入内容" className="flex-1 border border-slate-200 rounded h-7 px-2 text-[11px] outline-none focus:border-blue-400 font-sans" />
       )}
     </div>
   );
@@ -268,19 +268,19 @@ const SearchPanel = ({ tab, isVisible }: { tab: TabType, isVisible: boolean }) =
         
         {/* 操作按钮区：紧跟在筛选项后面 */}
         <div className="flex items-center gap-2 border-l border-slate-200 pl-4 ml-2">
-          <button className="h-7 px-4 bg-[#1890ff] text-white rounded text-[11px] hover:bg-blue-600 transition-colors">搜索</button>
-          <button className="h-7 px-4 bg-white border border-slate-200 text-slate-600 rounded text-[11px] hover:bg-slate-50 transition-colors">重置</button>
+          <button className="h-7 px-4 bg-[#1890ff] text-white rounded text-[11px] hover:bg-blue-600 transition-colors font-sans">搜索</button>
+          <button className="h-7 px-4 bg-white border border-slate-200 text-slate-600 rounded text-[11px] hover:bg-slate-50 transition-colors font-sans">重置</button>
           
           <div className="w-[1px] h-4 bg-slate-200 mx-2"></div>
 
-          <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+          <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors font-sans">
             <Plus size={14}/> 新增
           </button>
-          <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+          <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors font-sans">
             <FileSpreadsheet size={14}/> 导出
           </button>
           {tab === '报销补款' && (
-            <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+            <button className="h-7 px-3 bg-[#1890ff] text-white rounded-md text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors font-sans">
               <History size={14}/> 补款记录
             </button>
           )}
@@ -307,16 +307,16 @@ const App = () => {
       {isSearchOpen && (
         <div className="bg-white p-4 border border-slate-200 rounded-lg shadow-sm mb-2 flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500">资产编号</span>
-            <input type="text" placeholder="请输入内容" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-32 outline-none focus:border-blue-400" />
+            <span className="text-[11px] text-slate-500 font-sans">资产编号</span>
+            <input type="text" placeholder="请输入内容" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-32 outline-none focus:border-blue-400 font-mono" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500">资产名称</span>
-            <input type="text" placeholder="请输入内容" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-32 outline-none focus:border-blue-400" />
+            <span className="text-[11px] text-slate-500 font-sans">资产名称</span>
+            <input type="text" placeholder="请输入内容" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-32 outline-none focus:border-blue-400 font-sans" />
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500">资产状态</span>
-            <select className="border border-slate-200 rounded h-7 px-2 text-[11px] w-24 outline-none focus:border-blue-400 bg-white">
+            <span className="text-[11px] text-slate-500 font-sans">资产状态</span>
+            <select className="border border-slate-200 rounded h-7 px-2 text-[11px] w-24 outline-none focus:border-blue-400 bg-white font-sans">
               <option>请选择</option>
               <option>在用</option>
               <option>闲置</option>
@@ -324,39 +324,39 @@ const App = () => {
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500">采购日期</span>
+            <span className="text-[11px] text-slate-500 font-sans">采购日期</span>
             <div className="flex items-center gap-1">
               <div className="relative">
                  <Clock size={12} className="absolute left-1 top-1.5 text-slate-300"/>
-                 <input type="text" placeholder="开始日期" className="border border-slate-200 rounded h-7 pl-5 pr-2 text-[11px] w-24 outline-none focus:border-blue-400" />
+                 <input type="text" placeholder="开始日期" className="border border-slate-200 rounded h-7 pl-5 pr-2 text-[11px] w-24 outline-none focus:border-blue-400 font-mono" />
               </div>
               <span className="text-slate-400">至</span>
-              <input type="text" placeholder="结束日期" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-24 outline-none focus:border-blue-400" />
+              <input type="text" placeholder="结束日期" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-24 outline-none focus:border-blue-400 font-mono" />
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-slate-500">录入时间</span>
+            <span className="text-[11px] text-slate-500 font-sans">录入时间</span>
             <div className="flex items-center gap-1">
               <div className="relative">
                  <Clock size={12} className="absolute left-1 top-1.5 text-slate-300"/>
-                 <input type="text" placeholder="开始日期" className="border border-slate-200 rounded h-7 pl-5 pr-2 text-[11px] w-24 outline-none focus:border-blue-400" />
+                 <input type="text" placeholder="开始日期" className="border border-slate-200 rounded h-7 pl-5 pr-2 text-[11px] w-24 outline-none focus:border-blue-400 font-mono" />
               </div>
               <span className="text-slate-400">至</span>
-              <input type="text" placeholder="结束日期" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-24 outline-none focus:border-blue-400" />
+              <input type="text" placeholder="结束日期" className="border border-slate-200 rounded h-7 px-2 text-[11px] w-24 outline-none focus:border-blue-400 font-mono" />
             </div>
           </div>
-          <button className="h-7 px-4 bg-[#1890ff] text-white rounded text-[11px] hover:bg-blue-600 transition-colors">搜索</button>
-          <button className="h-7 px-4 bg-white border border-slate-200 text-slate-600 rounded text-[11px] hover:bg-slate-50 transition-colors">重置</button>
+          <button className="h-7 px-4 bg-[#1890ff] text-white rounded text-[11px] hover:bg-blue-600 transition-colors font-sans">搜索</button>
+          <button className="h-7 px-4 bg-white border border-slate-200 text-slate-600 rounded text-[11px] hover:bg-slate-50 transition-colors font-sans">重置</button>
           
           <div className="w-[1px] h-4 bg-slate-200 mx-2"></div>
 
-          <button className="h-7 px-3 bg-[#1890ff] text-white rounded text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+          <button className="h-7 px-3 bg-[#1890ff] text-white rounded text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors font-sans">
             <Plus size={14}/> 新增
           </button>
-          <button className="h-7 px-3 bg-[#52c41a] text-white rounded text-[11px] flex items-center gap-1 hover:bg-green-600 transition-colors">
+          <button className="h-7 px-3 bg-[#52c41a] text-white rounded text-[11px] flex items-center gap-1 hover:bg-green-600 transition-colors font-sans">
             <Import size={14}/> 导入
           </button>
-          <button className="h-7 px-3 bg-[#1890ff] text-white rounded text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors">
+          <button className="h-7 px-3 bg-[#1890ff] text-white rounded text-[11px] flex items-center gap-1 hover:bg-blue-600 transition-colors font-sans">
             <FileSpreadsheet size={14}/> 导出
           </button>
         </div>
@@ -368,7 +368,7 @@ const App = () => {
         <div className="overflow-auto flex-1">
           <table className="w-full text-left border-collapse min-w-[1800px]">
             <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
-              <tr className="text-[11px] font-bold text-slate-500">
+              <tr className="text-[11px] font-bold text-slate-500 font-sans">
                 <th className="px-3 py-3 border-r border-slate-100 text-center w-12">序号</th>
                 <th className="px-3 py-3 border-r border-slate-100">资产编号</th>
                 <th className="px-3 py-3 border-r border-slate-100">资产名称</th>
@@ -392,16 +392,16 @@ const App = () => {
             <tbody>
               {assetLedgerData.map((row, idx) => (
                 <tr key={row.id} className={`text-[11px] text-slate-600 h-10 border-b border-slate-300 hover:bg-blue-50/40 transition-colors ${row.isRedRow ? 'bg-red-300 bg-opacity-50' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')}`}>
-                  <td className="px-3 py-1 text-center border-r border-slate-100">{row.id}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.assetNo}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.assetName}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.category}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.model}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.params}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.purchaseDate}</td>
+                  <td className="px-3 py-1 text-center border-r border-slate-100 font-mono">{row.id}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-mono">{row.assetNo}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.assetName}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.category}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.model}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.params}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-mono">{row.purchaseDate}</td>
                   <td className="px-3 py-1 border-r border-slate-100 text-right font-mono">{row.amount.toFixed(2)}</td>
-                  <td className="px-3 py-1 border-r border-slate-100 text-center"></td>
-                  <td className="px-3 py-1 border-r border-slate-100 text-center">
+                  <td className="px-3 py-1 border-r border-slate-100 text-center font-sans"></td>
+                  <td className="px-3 py-1 border-r border-slate-100 text-center font-sans">
                     <span className={`px-2 py-0.5 rounded ${
                       row.status === '在用' ? 'bg-blue-50 text-blue-500' :
                       row.status === '租借中' || row.status === '租赁' ? 'bg-orange-50 text-orange-500' :
@@ -410,23 +410,23 @@ const App = () => {
                       {row.status}
                     </span>
                   </td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.owner}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.dept}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.location}</td>
-                  <td className="px-3 py-1 border-r border-slate-100 text-center">
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.owner}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.dept}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.location}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 text-center font-sans">
                     {row.hasImage && (
                       <div className="inline-flex items-center justify-center relative">
                          <span className="text-[#1890ff] cursor-pointer hover:underline">图片</span>
                          {row.imageCount > 0 && (
-                           <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">{row.imageCount}</span>
+                           <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full font-mono">{row.imageCount}</span>
                          )}
                       </div>
                     )}
                   </td>
-                  <td className="px-3 py-1 border-r border-slate-100"></td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.remarks}</td>
-                  <td className="px-3 py-1 border-r border-slate-100">{row.entryTime}</td>
-                  <td className={`px-3 py-1 text-center sticky right-0 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${row.isRedRow ? 'bg-red-300 bg-opacity-0' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')}`}>
+                  <td className="px-3 py-1 border-r border-slate-100 font-mono"></td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.remarks}</td>
+                  <td className="px-3 py-1 border-r border-slate-100 font-mono">{row.entryTime}</td>
+                  <td className={`px-3 py-1 text-center sticky right-0 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${row.isRedRow ? 'bg-red-300 bg-opacity-0' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')} font-sans`}>
                     <div className="flex justify-center gap-2 text-[#1890ff]">
                       <button className="hover:underline">修改</button>
                       <button className="hover:underline">领用</button>
@@ -443,22 +443,22 @@ const App = () => {
             </tbody>
           </table>
         </div>
-        <div className="px-4 py-2 border-t border-slate-200 flex items-center justify-end gap-4 text-[11px] bg-slate-50">
-           <span className="text-slate-500">共 21 条</span>
-           <select className="border border-slate-200 rounded h-6 text-[11px] outline-none">
+        <div className="px-4 py-2 border-t border-slate-200 flex items-center justify-end gap-4 text-[11px] bg-slate-50 font-sans">
+           <span className="text-slate-500">共 <span className="font-mono">21</span> 条</span>
+           <select className="border border-slate-200 rounded h-6 text-[11px] outline-none font-sans">
              <option>10条/页</option>
              <option>20条/页</option>
            </select>
            <div className="flex gap-1">
               <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50"><ChevronLeft size={12}/></button>
-              <button className="w-6 h-6 border bg-[#1890ff] text-white border-[#1890ff] rounded flex items-center justify-center">1</button>
-              <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50">2</button>
-              <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50">3</button>
+              <button className="w-6 h-6 border bg-[#1890ff] text-white border-[#1890ff] rounded flex items-center justify-center font-mono">1</button>
+              <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50 font-mono">2</button>
+              <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50 font-mono">3</button>
               <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50"><ChevronRight size={12}/></button>
            </div>
            <div className="flex items-center gap-1">
               <span>前往</span>
-              <input type="text" defaultValue="1" className="w-8 h-6 border border-slate-200 rounded text-center outline-none" />
+              <input type="text" defaultValue="1" className="w-8 h-6 border border-slate-200 rounded text-center outline-none font-mono" />
               <span>页</span>
            </div>
         </div>
@@ -487,27 +487,27 @@ const App = () => {
           <div className="grid grid-cols-5 gap-4 mb-8">
             {['21个 总资产', '6个 在用资产', '2个 租赁中资产', '11个 闲置资产', '2个 报废资产'].map(label => (
               <div key={label} className="border border-slate-200 rounded-lg p-4 text-center bg-[#fafafa]">
-                <div className="text-xl font-bold text-[#1890ff] mb-1">{label.split(' ')[0]}</div>
-                <div className="text-[11px] text-slate-500 font-medium">{label.split(' ')[1]}</div>
+                <div className="text-xl font-bold font-mono text-[#1890ff] mb-1">{label.split(' ')[0]}</div>
+                <div className="text-[11px] text-slate-500 font-medium font-sans">{label.split(' ')[1]}</div>
               </div>
             ))}
           </div>
           <div className="grid grid-cols-2 gap-8">
             <div className="border border-slate-100 rounded-lg p-5 flex flex-col h-[350px]">
-              <div className="text-xs font-bold mb-6 text-slate-600 flex items-center gap-2"><Activity size={14} className="text-[#1890ff]"/> 资产分类统计</div>
+              <div className="text-xs font-bold mb-6 text-slate-600 flex items-center gap-2 font-sans"><Activity size={14} className="text-[#1890ff]"/> 资产分类统计</div>
               <div className="flex-1 flex items-end justify-around px-8 border-b border-slate-200 pb-1">
-                <div className="w-10 bg-[#1890ff] h-1/4 rounded-t relative transition-all hover:opacity-80"><span className="absolute -top-6 text-[11px] w-full text-center font-bold">4</span><div className="absolute top-full pt-2 text-[10px] w-full text-center whitespace-nowrap -translate-x-1/2 left-1/2">办公设备</div></div>
-                <div className="w-10 bg-[#1890ff] h-3/4 rounded-t relative transition-all hover:opacity-80"><span className="absolute -top-6 text-[11px] w-full text-center font-bold">15</span><div className="absolute top-full pt-2 text-[10px] w-full text-center whitespace-nowrap -translate-x-1/2 left-1/2">软件资产</div></div>
-                <div className="w-10 bg-[#1890ff] h-1/6 rounded-t relative transition-all hover:opacity-80"><span className="absolute -top-6 text-[11px] w-full text-center font-bold">2</span><div className="absolute top-full pt-2 text-[10px] w-full text-center whitespace-nowrap -translate-x-1/2 left-1/2">其他资产</div></div>
+                <div className="w-10 bg-[#1890ff] h-1/4 rounded-t relative transition-all hover:opacity-80"><span className="absolute -top-6 text-[11px] w-full text-center font-bold font-mono">4</span><div className="absolute top-full pt-2 text-[10px] w-full text-center whitespace-nowrap -translate-x-1/2 left-1/2 font-sans">办公设备</div></div>
+                <div className="w-10 bg-[#1890ff] h-3/4 rounded-t relative transition-all hover:opacity-80"><span className="absolute -top-6 text-[11px] w-full text-center font-bold font-mono">15</span><div className="absolute top-full pt-2 text-[10px] w-full text-center whitespace-nowrap -translate-x-1/2 left-1/2 font-sans">软件资产</div></div>
+                <div className="w-10 bg-[#1890ff] h-1/6 rounded-t relative transition-all hover:opacity-80"><span className="absolute -top-6 text-[11px] w-full text-center font-bold font-mono">2</span><div className="absolute top-full pt-2 text-[10px] w-full text-center whitespace-nowrap -translate-x-1/2 left-1/2 font-sans">其他资产</div></div>
               </div>
             </div>
             <div className="border border-slate-100 rounded-lg p-5 flex flex-col h-[350px]">
-              <div className="text-xs font-bold mb-6 text-slate-600 flex items-center gap-2"><Activity size={14} className="text-[#1890ff]"/> 资产状态分布</div>
+              <div className="text-xs font-bold mb-6 text-slate-600 flex items-center gap-2 font-sans"><Activity size={14} className="text-[#1890ff]"/> 资产状态分布</div>
               <div className="flex-1 flex items-center justify-center relative">
                 <div className="w-40 h-40 rounded-full border-[20px] border-[#52c41a] border-r-[#f5222d] border-b-[#faad14] border-l-[#1890ff]"></div>
                 <div className="absolute text-center">
-                  <div className="text-lg font-bold text-slate-700">21</div>
-                  <div className="text-[10px] text-slate-400">资产总量</div>
+                  <div className="text-lg font-bold text-slate-700 font-mono">21</div>
+                  <div className="text-[10px] text-slate-400 font-sans">资产总量</div>
                 </div>
               </div>
             </div>
@@ -522,12 +522,12 @@ const App = () => {
             <div className="overflow-auto flex-1">
               <table className="w-full text-left border-collapse min-w-[2400px]">
                 <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
-                  <tr className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  <tr className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">
                     <th className="px-3 py-3 text-center w-14 border-r border-slate-100">序号</th>
                     {config.headers.map(h => (
-                      <th key={h} className="px-3 py-3 min-w-[120px] border-r border-slate-100">{h}</th>
+                      <th key={h} className="px-3 py-3 min-w-[120px] border-r border-slate-100 font-sans">{h}</th>
                     ))}
-                    <th className="px-3 py-3 w-32 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)]">操作</th>
+                    <th className="px-3 py-3 w-32 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] font-sans">操作</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -536,46 +536,51 @@ const App = () => {
                       key={idx} 
                       className={`hover:bg-blue-50/40 transition-colors text-[11px] text-slate-600 h-11 border-b border-slate-300 ${idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white'}`}
                     >
-                      <td className="px-3 py-1 text-center border-r border-slate-100">{(currentPage - 1) * pageSize + idx + 1}</td>
-                      {config.headers.map(h => (
-                        <td key={h} className={`px-3 py-1 border-r border-slate-100 max-w-[200px] ${h !== '报销凭证' ? 'truncate' : ''} ${h.includes('金额') ? 'text-right font-mono' : ''}`}>
-                          {h === '报销凭证' ? (
-                            <div className="relative group cursor-pointer flex items-center gap-1 text-[#1890ff]">
-                              <ImageIcon size={14} />
-                              <span>{row[h]}</span>
-                              {/* 悬停预览图 - idx < 4 时使用 top-0 确保不被表头挡住，且向下展示完整内容 */}
-                              <div className={`absolute left-full ml-4 ${idx < 4 ? 'top-0 translate-y-0' : 'top-1/2 -translate-y-1/2'} z-[100] hidden group-hover:block p-4 bg-white border border-slate-200 rounded-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[640px]`}>
-                                <div className="mb-3 flex items-center justify-between border-b pb-2 border-slate-100">
-                                  <div className="flex flex-col">
-                                    <span className="text-[13px] font-bold text-slate-800">报销凭证详情预览</span>
-                                    <span className="text-[10px] text-slate-400">单号: {row['报销单编号']}</span>
-                                  </div>
-                                  <div className="bg-blue-50 text-[#1890ff] px-2 py-0.5 rounded text-[10px] font-medium">共 4 张图片</div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                  {[1, 2, 3, 4].map(num => (
-                                    <div key={num} className="relative group/img overflow-hidden rounded-lg border border-slate-100 shadow-sm bg-slate-50 aspect-[4/3]">
-                                      <img 
-                                        src={`https://picsum.photos/seed/${idx + 50 + num}/400/300`} 
-                                        alt={`凭证图片 ${num}`} 
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
-                                      />
-                                      <div className="absolute bottom-1 right-1 bg-black/50 backdrop-blur-sm text-[9px] text-white px-1.5 py-0.5 rounded-md">图 {num}</div>
+                      <td className="px-3 py-1 text-center border-r border-slate-100 font-mono">{(currentPage - 1) * pageSize + idx + 1}</td>
+                      {config.headers.map(h => {
+                        const isMonoField = h.includes('时间') || h.includes('日期') || h.includes('金额') || h.includes('编号') || h.includes('单号') || h.includes('UID') || h.includes('代码') || h.includes('数量') || h.includes('收款') || h.includes('业绩') || h.includes('余额') || h === '手机号码';
+                        const alignRight = h.includes('金额') || h.includes('收款') || h.includes('业绩') || h.includes('余额');
+                        
+                        return (
+                          <td key={h} className={`px-3 py-1 border-r border-slate-100 max-w-[200px] ${h !== '报销凭证' ? 'truncate' : ''} ${alignRight ? 'text-right' : ''} ${isMonoField ? 'font-mono' : 'font-sans'}`}>
+                            {h === '报销凭证' ? (
+                              <div className="relative group cursor-pointer flex items-center gap-1 text-[#1890ff] font-sans">
+                                <ImageIcon size={14} />
+                                <span>{row[h]}</span>
+                                {/* 悬停预览图 */}
+                                <div className={`absolute left-full ml-4 ${idx < 4 ? 'top-0 translate-y-0' : 'top-1/2 -translate-y-1/2'} z-[100] hidden group-hover:block p-4 bg-white border border-slate-200 rounded-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[640px]`}>
+                                  <div className="mb-3 flex items-center justify-between border-b pb-2 border-slate-100">
+                                    <div className="flex flex-col">
+                                      <span className="text-[13px] font-bold text-slate-800 font-sans">报销凭证详情预览</span>
+                                      <span className="text-[10px] text-slate-400 font-mono">单号: {row['报销单编号']}</span>
                                     </div>
-                                  ))}
-                                </div>
-                                <div className="mt-3 pt-2 border-t border-slate-50 text-[10px] text-center text-slate-400 font-medium flex items-center justify-center gap-1">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                                  <span>凭证图片预览中 - 请确保所有材料真实有效</span>
+                                    <div className="bg-blue-50 text-[#1890ff] px-2 py-0.5 rounded text-[10px] font-medium font-sans">共 4 张图片</div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-3">
+                                    {[1, 2, 3, 4].map(num => (
+                                      <div key={num} className="relative group/img overflow-hidden rounded-lg border border-slate-100 shadow-sm bg-slate-50 aspect-[4/3]">
+                                        <img 
+                                          src={`https://picsum.photos/seed/${idx + 50 + num}/400/300`} 
+                                          alt={`凭证图片 ${num}`} 
+                                          className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
+                                        />
+                                        <div className="absolute bottom-1 right-1 bg-black/50 backdrop-blur-sm text-[9px] text-white px-1.5 py-0.5 rounded-md font-sans">图 {num}</div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  <div className="mt-3 pt-2 border-t border-slate-50 text-[10px] text-center text-slate-400 font-medium flex items-center justify-center gap-1 font-sans">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                                    <span>凭证图片预览中 - 请确保所有材料真实有效</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ) : (
-                            row[h]
-                          )}
-                        </td>
-                      ))}
-                      <td className={`px-3 py-1 text-center sticky right-0 group-hover:bg-blue-50/40 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${idx % 2 === 1 ? 'bg-[#f8fcff]' : 'bg-white'}`}>
+                            ) : (
+                              row[h]
+                            )}
+                          </td>
+                        );
+                      })}
+                      <td className={`px-3 py-1 text-center sticky right-0 group-hover:bg-blue-50/40 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${idx % 2 === 1 ? 'bg-[#f8fcff]' : 'bg-white'} font-sans`}>
                         <div className="flex justify-center gap-2">
                           <button className="text-[#1890ff] hover:underline font-medium">详情</button>
                           <button className="text-[#1890ff] hover:underline font-medium">审批</button>
@@ -587,16 +592,16 @@ const App = () => {
               </table>
             </div>
 
-            <div className="px-4 py-2 border-t border-slate-200 flex items-center justify-center gap-4 text-[11px] bg-slate-50">
-              <span className="text-slate-500">共 {data.length} 条</span>
+            <div className="px-4 py-2 border-t border-slate-200 flex items-center justify-center gap-4 text-[11px] bg-slate-50 font-sans">
+              <span className="text-slate-500">共 <span className="font-mono">{data.length}</span> 条</span>
               <div className="flex gap-1">
                 <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white"><ChevronLeft size={12}/></button>
-                <button className="w-6 h-6 border rounded font-medium bg-[#1890ff] text-white border-[#1890ff]">1</button>
+                <button className="w-6 h-6 border rounded font-medium bg-[#1890ff] text-white border-[#1890ff] font-mono">1</button>
                 <button className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center bg-white"><ChevronRight size={12}/></button>
               </div>
               <div className="flex items-center gap-1">
                 <span>前往</span>
-                <input type="number" defaultValue={1} className="w-8 h-6 border border-slate-200 rounded text-center" />
+                <input type="number" defaultValue={1} className="w-8 h-6 border border-slate-200 rounded text-center font-mono" />
                 <span>页</span>
               </div>
             </div>

@@ -15,7 +15,17 @@ import {
   Flame,
   Import,
   Clock,
-  Calendar
+  Calendar,
+  Wallet,
+  CreditCard,
+  FileText,
+  Landmark,
+  Coins,
+  Receipt,
+  PieChart,
+  BarChart3,
+  Building2,
+  Users
 } from 'lucide-react';
 
 // --- 类型定义 ---
@@ -123,7 +133,7 @@ const generateAssetLedgerData = () => {
     entryTime: `2025-10-13 17:54:${String(15 + i).padStart(2, '0')}`,
     hasImage: i === 3 || i === 4,
     imageCount: i === 3 ? 1 : (i === 4 ? 3 : 0),
-    isRedRow: i === 4 // Simulate the red row in screenshot
+    isRedRow: i === 4 
   }));
 };
 
@@ -131,24 +141,33 @@ const generateAssetLedgerData = () => {
 // --- 子组件 ---
 
 const NotificationBar = () => (
-  <div className="flex items-center justify-between mb-4 px-4 py-2 bg-[#0f172a] rounded-lg shadow-md shrink-0 h-12">
+  <div className="flex items-center justify-between mb-3 px-4 py-2 bg-white rounded-lg shadow-sm shrink-0 h-14 border border-slate-100">
     <div className="flex items-center gap-3 shrink-0">
-      <span className="bg-[#ef4444] text-white text-[12px] font-bold px-2 py-1 rounded font-sans">重要公告</span>
-      <Bell size={16} className="text-slate-300" />
+      <button className="bg-[#1890ff] hover:bg-blue-600 text-white text-[13px] font-bold px-3 py-1.5 rounded flex items-center gap-2 transition-colors">
+        主要公告 <Bell size={14} className="fill-current" />
+      </button>
     </div>
-    <div className="flex-1 overflow-hidden relative h-6 flex items-center mx-4">
-      <div className="whitespace-nowrap animate-[marquee_30s_linear_infinite] flex items-center gap-12 text-[13px] text-slate-200 font-medium font-sans">
+    <div className="flex-1 overflow-hidden relative h-8 flex items-center mx-4">
+      <div 
+        className="whitespace-nowrap flex items-center gap-12 text-[13px] text-[#1e293b] font-medium"
+        style={{ animation: 'marquee 3600s linear infinite' }}
+      >
         <span className="flex items-center gap-2">
-          <Megaphone size={14} className="text-white"/> 
-          关于 2025 年度秋季职业晋升评审的通知: 点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。
+          <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+          <Megaphone size={16} className="text-slate-500"/> 
+          职级晋升评审的通知: 点击下方详情以阅读完整公告内容。请所有相关人员务必在截止日期前完成确认。
         </span>
         <span className="flex items-center gap-2">
-          <Flame size={14} className="text-orange-400"/>
-          界面优化: 系统视觉风格已全面升级，如有问题请联系管理员。
+          <Flame size={16} className="text-[#f5222d]"/>
+          <span className="text-[#1e293b] font-bold">10月业绩pk赛圆满结束，恭喜华东大区获得冠军！</span>
+        </span>
+        <span className="flex items-center gap-2">
+           <div className="w-2 h-2 rounded-full bg-orange-400"></div>
+           系统升级通知: 今晚 24:00 将进行系统维护。
         </span>
       </div>
     </div>
-    <div className="bg-slate-800 text-slate-400 text-[11px] font-mono px-2 py-1 rounded border border-slate-700">
+    <div className="bg-[#f5f5f5] text-slate-400 text-[12px] font-medium px-3 py-1 rounded">
       2025-11-19
     </div>
     <style>{`@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }`}</style>
@@ -158,24 +177,42 @@ const NotificationBar = () => (
 const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t: TabType) => void }) => {
   const tabs: TabType[] = ['报销补款', '报销申请', '订单垫付', '提现申请', '预支申请', '还款申请', '预支账单', '财务收支', '发票管理', '银账查询财务', '银账查询业务员', '资产管理'];
   
+  // 截图风格的颜色定义 (红, 黄, 蓝, 绿, 青, 紫 循环)
+  const styles = [
+    { border: '#ffccc7', bg: '#fff1f0', text: '#ff4d4f', icon: Wallet },
+    { border: '#ffe7ba', bg: '#fff7e6', text: '#fa8c16', icon: FileText },
+    { border: '#bae0ff', bg: '#e6f7ff', text: '#1890ff', icon: CreditCard },
+    { border: '#d9f7be', bg: '#f6ffed', text: '#52c41a', icon: Coins },
+    { border: '#87e8de', bg: '#e6fffb', text: '#13c2c2', icon: Receipt },
+    { border: '#efdbff', bg: '#f9f0ff', text: '#722ed1', icon: Landmark },
+  ];
+
   return (
-    <div className="grid grid-cols-6 gap-3 mb-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
-      {tabs.map((tab) => {
+    <div className="grid grid-cols-6 gap-3 mb-3">
+      {tabs.map((tab, idx) => {
         const isActive = activeTab === tab;
+        const style = styles[idx % styles.length];
+        const Icon = style.icon;
         
         return (
           <button
             key={tab}
             onClick={() => onSelect(tab)}
             className={`
-              h-8 rounded-lg text-[13px] font-bold font-sans transition-all flex items-center justify-center px-2 text-center break-all leading-tight shadow-sm border
-              ${isActive 
-                ? `bg-[#1890ff] text-white border-transparent shadow-md transform scale-[1.02]` 
-                : `bg-[#F0F9FE] text-[#1890ff] border-[#91caff] hover:bg-blue-100` 
-              }
+              h-12 rounded-lg flex items-center justify-center gap-2 text-[13px] font-bold transition-all duration-200 relative overflow-hidden group
+              ${isActive ? 'shadow-md scale-105 z-10 ring-1' : 'hover:scale-105 hover:z-10'}
             `}
+            style={{
+              backgroundColor: 'white',
+              color: '#1e293b', // slate-800
+              border: `1px solid ${style.text}`,
+              borderColor: style.text,
+            }}
           >
-            {tab}
+            <div className={`p-1 rounded-full`} style={{ backgroundColor: style.text, color: 'white' }}>
+               <Icon size={14} strokeWidth={3} />
+            </div>
+            <span>{tab}</span>
           </button>
         );
       })}
@@ -194,49 +231,79 @@ const DataOverview = ({
   setAssetSubTab: (t: 'overview' | 'ledger') => void, 
   onToggleSearch: () => void 
 }) => (
-  <div className="bg-[#f0f7ff] rounded-lg border border-[#d9d9d9] overflow-hidden flex items-center shadow-sm h-12 mb-2">
-    <div className="flex items-center gap-3 px-4 flex-1">
-      {activeTab === '资产管理' ? (
-        <div className="flex gap-4">
+  <div className="bg-white rounded-lg border border-slate-200 overflow-hidden flex items-center shadow-sm h-14 mb-3 px-4">
+    {activeTab === '资产管理' ? (
+        <div className="flex gap-4 flex-1">
+           <div className="flex items-center gap-2 mr-6">
+            <div className="w-8 h-8 rounded-full bg-[#1890ff] flex items-center justify-center text-white">
+               <Activity size={18} />
+            </div>
+            <span className="text-[15px] font-bold text-slate-800">资产管理</span>
+          </div>
            <button 
              onClick={() => setAssetSubTab('overview')}
-             className={`text-sm font-bold font-sans relative h-12 px-2 flex items-center ${assetSubTab === 'overview' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
+             className={`text-sm font-bold relative h-14 px-2 flex items-center ${assetSubTab === 'overview' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
            >
              资产总览
              {assetSubTab === 'overview' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#1890ff]"></div>}
            </button>
            <button 
              onClick={() => setAssetSubTab('ledger')}
-             className={`text-sm font-bold font-sans relative h-12 px-2 flex items-center ${assetSubTab === 'ledger' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
+             className={`text-sm font-bold relative h-14 px-2 flex items-center ${assetSubTab === 'ledger' ? 'text-[#1890ff]' : 'text-slate-600 hover:text-[#1890ff]'}`}
            >
              资产台账
              {assetSubTab === 'ledger' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#1890ff]"></div>}
            </button>
+           <div className="flex-1"></div>
+           <div 
+            onClick={onToggleSearch}
+            className="flex items-center gap-1 text-[#1890ff] font-medium text-[13px] cursor-pointer hover:underline"
+          >
+            <Search size={14} />
+            <span>点这高级筛选</span>
+          </div>
         </div>
       ) : (
-        <>
-          <div className="flex items-center gap-2 mr-8 shrink-0">
-            <Activity size={18} className="text-[#1890ff]" />
-            <span className="text-sm font-bold font-sans text-[#003a8c]">数据概览</span>
+      <>
+        <div className="flex items-center gap-3 shrink-0 mr-8">
+          <div className="w-8 h-8 rounded-full bg-[#1890ff] flex items-center justify-center text-white">
+             <BarChart3 size={16} className="fill-current" />
           </div>
-          <div className="flex gap-12">
-            {[['待审核数', '12', '#262626'], ['今日已审核', '45', '#262626'], ['当月已审核', '892', '#52c41a'], ['当年已审核', '12540', '#f5222d']].map(([label, val, color]) => (
-              <div key={label} className="flex items-center gap-1.5">
-                <span className="text-[12px] text-[#8c8c8c] font-sans">{label}:</span>
-                <span className="text-base font-bold font-mono" style={{ color }}>{val}</span>
-              </div>
-            ))}
+          <span className="text-[15px] font-bold text-slate-800">数据概览</span>
+        </div>
+        
+        <div className="flex-1 flex items-center gap-6 overflow-x-auto no-scrollbar">
+          {[
+             { label: '其它类400客户量', val: '158', color: '#f5222d' },
+             { label: '正常类400客户量', val: '342', color: '#1890ff' },
+             { label: '400总接听量', val: '500', color: '#52c41a' },
+             { label: '其它类客户占比', val: '31.6%', color: '#722ed1' },
+             { label: '正常类400客户占比', val: '68.4%', color: '#13c2c2' },
+             { label: '预约单录单量', val: '85', color: '#fa8c16' },
+             { label: '预约单回访量', val: '80', color: '#eb2f96' },
+             { label: '400电话转化率', val: '42.0%', color: '#f5222d' },
+          ].map((item, i) => (
+            <div key={i} className="flex items-baseline gap-1 whitespace-nowrap">
+              <span className="text-[12px] text-slate-500 font-medium">{item.label}</span>
+              <span className="text-[16px] font-bold font-mono" style={{ color: item.color }}>{item.val}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-4 pl-4 border-l border-slate-100 ml-4 shrink-0">
+          <button className="bg-[#1890ff] hover:bg-blue-600 text-white text-[12px] font-medium px-4 py-1.5 rounded flex items-center gap-1 transition-colors shadow-sm">
+             <Plus size={14} /> 新增
+          </button>
+          <div 
+            onClick={onToggleSearch}
+            className="flex items-center gap-1 text-[#1890ff] font-medium text-[13px] cursor-pointer hover:underline"
+          >
+            <Search size={14} />
+            <span>点这高级筛选</span>
           </div>
-        </>
-      )}
-    </div>
-    <div 
-      onClick={onToggleSearch}
-      className="h-full px-5 bg-[#e6f7ff] border-l border-[#d9d9d9] flex items-center gap-2 text-[#1890ff] font-medium text-xs font-sans cursor-pointer hover:bg-blue-100 transition-colors"
-    >
-      <Search size={14} />
-      <span>点这高级筛选</span>
-    </div>
+        </div>
+      </>
+    )}
   </div>
 );
 
@@ -391,7 +458,7 @@ const App = () => {
             </thead>
             <tbody>
               {assetLedgerData.map((row, idx) => (
-                <tr key={row.id} className={`text-[11px] text-slate-600 h-10 border-b border-slate-300 hover:bg-blue-50/40 transition-colors ${row.isRedRow ? 'bg-red-300 bg-opacity-50' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')}`}>
+                <tr key={row.id} className={`text-[11px] text-slate-600 h-10 border-b border-slate-300 hover:bg-blue-50/40 transition-colors ${row.isRedRow ? 'bg-red-300 bg-opacity-50' : (idx % 2 === 1 ? 'bg-[#FFF0F0]' : 'bg-white')}`}>
                   <td className="px-3 py-1 text-center border-r border-slate-100 font-mono">{row.id}</td>
                   <td className="px-3 py-1 border-r border-slate-100 font-mono">{row.assetNo}</td>
                   <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.assetName}</td>
@@ -426,7 +493,7 @@ const App = () => {
                   <td className="px-3 py-1 border-r border-slate-100 font-mono"></td>
                   <td className="px-3 py-1 border-r border-slate-100 font-sans">{row.remarks}</td>
                   <td className="px-3 py-1 border-r border-slate-100 font-mono">{row.entryTime}</td>
-                  <td className={`px-3 py-1 text-center sticky right-0 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${row.isRedRow ? 'bg-red-300 bg-opacity-0' : (idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white')} font-sans`}>
+                  <td className={`px-3 py-1 text-center sticky right-0 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${row.isRedRow ? 'bg-red-300 bg-opacity-0' : (idx % 2 === 1 ? 'bg-[#FFF0F0]' : 'bg-white')} font-sans`}>
                     <div className="flex justify-center gap-2 text-[#1890ff]">
                       <button className="hover:underline">修改</button>
                       <button className="hover:underline">领用</button>
@@ -534,7 +601,7 @@ const App = () => {
                   {data.map((row, idx) => (
                     <tr 
                       key={idx} 
-                      className={`hover:bg-blue-50/40 transition-colors text-[11px] text-slate-600 h-11 border-b border-slate-300 ${idx % 2 === 1 ? 'bg-[#F0F9FE]' : 'bg-white'}`}
+                      className={`hover:bg-blue-50/40 transition-colors text-[11px] text-slate-600 h-11 border-b border-slate-300 ${idx % 2 === 1 ? 'bg-[#FFF0F0]' : 'bg-white'}`}
                     >
                       <td className="px-3 py-1 text-center border-r border-slate-100 font-mono">{(currentPage - 1) * pageSize + idx + 1}</td>
                       {config.headers.map(h => {
@@ -580,7 +647,7 @@ const App = () => {
                           </td>
                         );
                       })}
-                      <td className={`px-3 py-1 text-center sticky right-0 group-hover:bg-blue-50/40 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${idx % 2 === 1 ? 'bg-[#f8fcff]' : 'bg-white'} font-sans`}>
+                      <td className={`px-3 py-1 text-center sticky right-0 group-hover:bg-blue-50/40 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] ${idx % 2 === 1 ? 'bg-[#FFF0F0]' : 'bg-white'} font-sans`}>
                         <div className="flex justify-center gap-2">
                           <button className="text-[#1890ff] hover:underline font-medium">详情</button>
                           <button className="text-[#1890ff] hover:underline font-medium">审批</button>

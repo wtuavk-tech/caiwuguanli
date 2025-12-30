@@ -170,7 +170,7 @@ const NotificationBar = () => (
     <div className="bg-[#f5f5f5] text-slate-400 text-[12px] font-medium px-3 py-1 rounded">
       2025-11-19
     </div>
-    <style>{`@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }`}</style>
+    <style>{`@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }`}</style>
   </div>
 );
 

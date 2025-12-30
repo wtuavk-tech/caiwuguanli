@@ -21,8 +21,9 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #a8a8a8;
       }
-      body {
-        font-family: 'Source Han Sans CN', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      /* 强制覆盖所有元素的字体为思源黑体，包括表单元素和Tailwind类 */
+      body, button, input, select, textarea, .font-sans {
+        font-family: 'Source Han Sans CN', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
       }
     </style>
   <script type="importmap">

@@ -436,25 +436,25 @@ const App = () => {
         <div className="overflow-auto flex-1">
           <table className="w-full text-left border-collapse min-w-[1800px]">
             <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
-              <tr className="text-[11px] font-bold text-slate-500 font-sans">
-                <th className="px-3 py-3 border-r border-slate-100 text-center w-12">序号</th>
-                <th className="px-3 py-3 border-r border-slate-100">资产编号</th>
-                <th className="px-3 py-3 border-r border-slate-100">资产名称</th>
-                <th className="px-3 py-3 border-r border-slate-100">资产类别</th>
-                <th className="px-3 py-3 border-r border-slate-100">品牌型号</th>
-                <th className="px-3 py-3 border-r border-slate-100">配置参数</th>
-                <th className="px-3 py-3 border-r border-slate-100">采购日期</th>
-                <th className="px-3 py-3 border-r border-slate-100 text-right">采购金额</th>
-                <th className="px-3 py-3 border-r border-slate-100 text-center">发票</th>
-                <th className="px-3 py-3 border-r border-slate-100 text-center">资产状态</th>
-                <th className="px-3 py-3 border-r border-slate-100">归属人</th>
-                <th className="px-3 py-3 border-r border-slate-100">部门</th>
-                <th className="px-3 py-3 border-r border-slate-100">位置</th>
-                <th className="px-3 py-3 border-r border-slate-100 text-center">图片</th>
-                <th className="px-3 py-3 border-r border-slate-100">残值收入</th>
-                <th className="px-3 py-3 border-r border-slate-100">备注</th>
-                <th className="px-3 py-3 border-r border-slate-100">录入时间</th>
-                <th className="px-3 py-3 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)]">操作</th>
+              <tr className="text-[11px] font-bold text-slate-800 font-sans">
+                <th className="px-3 py-3 border-r border-slate-100 text-center w-12 whitespace-nowrap">序号</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">资产编号</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">资产名称</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">资产类别</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">品牌型号</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">配置参数</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">采购日期</th>
+                <th className="px-3 py-3 border-r border-slate-100 text-right whitespace-nowrap">采购金额</th>
+                <th className="px-3 py-3 border-r border-slate-100 text-center whitespace-nowrap">发票</th>
+                <th className="px-3 py-3 border-r border-slate-100 text-center whitespace-nowrap">资产状态</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">归属人</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">部门</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">位置</th>
+                <th className="px-3 py-3 border-r border-slate-100 text-center whitespace-nowrap">图片</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">残值收入</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">备注</th>
+                <th className="px-3 py-3 border-r border-slate-100 whitespace-nowrap">录入时间</th>
+                <th className="px-3 py-3 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] whitespace-nowrap">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -590,12 +590,12 @@ const App = () => {
             <div className="overflow-auto flex-1">
               <table className="w-full text-left border-collapse min-w-[2400px]">
                 <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
-                  <tr className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">
-                    <th className="px-3 py-3 text-center w-14 border-r border-slate-100">序号</th>
+                  <tr className="text-[11px] font-bold text-slate-800 uppercase tracking-wider font-sans">
+                    <th className="px-3 py-3 text-center w-14 border-r border-slate-100 whitespace-nowrap">序号</th>
                     {config.headers.map(h => (
-                      <th key={h} className="px-3 py-3 min-w-[120px] border-r border-slate-100 font-sans">{h}</th>
+                      <th key={h} className="px-3 py-3 min-w-[120px] border-r border-slate-100 font-sans whitespace-nowrap">{h}</th>
                     ))}
-                    <th className="px-3 py-3 w-32 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] font-sans">操作</th>
+                    <th className="px-3 py-3 w-32 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] font-sans whitespace-nowrap">操作</th>
                   </tr>
                 </thead>
                 <tbody>

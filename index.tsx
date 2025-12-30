@@ -200,12 +200,13 @@ const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t
             onClick={() => onSelect(tab)}
             className={`
               h-12 rounded-lg flex items-center justify-center gap-2 text-[13px] font-bold transition-all duration-200 relative overflow-hidden group
-              ${isActive ? 'shadow-md scale-105 z-10 ring-1' : 'hover:scale-105 hover:z-10'}
+              ${isActive ? 'shadow-md scale-105 z-10' : 'hover:scale-105 hover:z-10'}
             `}
             style={{
               backgroundColor: 'white',
               color: '#1e293b', // slate-800
-              border: `1px solid ${style.text}`,
+              borderWidth: isActive ? '2px' : '1px',
+              borderStyle: 'solid',
               borderColor: style.text,
             }}
           >

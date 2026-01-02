@@ -504,14 +504,14 @@ const App = () => {
               <span>前往</span>
               <input type="text" defaultValue="1" className="w-8 h-6 border border-slate-200 rounded text-center outline-none font-mono" />
               <span>页</span>
-           </div>
-        </div>
+                   </div>
+                </div>
       </div>
     </>
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 font-sans text-slate-900 flex flex-col">
+    <div className="h-screen bg-slate-50 p-4 font-sans text-slate-900 flex flex-col overflow-hidden">
        <NotificationBar />
        <TabSelector activeTab={activeTab} onSelect={setActiveTab} />
        <DataOverview 

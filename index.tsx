@@ -510,6 +510,135 @@ const App = () => {
     </>
   );
 
+  const renderAssetOverview = () => {
+    const stats = [
+      { label: '总资产', count: '21个' },
+      { label: '在用资产', count: '6个' },
+      { label: '租赁中资产', count: '2个' },
+      { label: '闲置资产', count: '11个' },
+      { label: '报废资产', count: '2个' },
+    ];
+  
+    const barData = [
+      { name: '虚拟资产', value: 4 },
+      { name: '实物资产', value: 15 },
+      { name: '手机', value: 2 },
+    ];
+  
+    const pieData = [
+       { name: '在用', value: 6, color: '#5b73e8' },   // Blueish
+       { name: '闲置', value: 11, color: '#82ca68' },  // Greenish
+       { name: '租赁中', value: 2, color: '#f7c44e' }, // Yellowish
+       { name: '已报废', value: 2, color: '#f26262' }, // Reddish
+    ];
+    
+    // Calculate pie chart dash arrays
+    const total = pieData.reduce((acc, cur) => acc + cur.value, 0);
+    let accumulated = 0;
+    const pieSegments = pieData.map(item => {
+      const percentage = item.value / total;
+      const dashArray = `${percentage * 2 * Math.PI * 40} ${2 * Math.PI * 40}`;
+      const rotate = accumulated * 360;
+      accumulated += percentage;
+      return { ...item, dashArray, rotate };
+    });
+  
+    return (
+      <div className="flex flex-col gap-4 h-full overflow-auto">
+        {/* Top Stats Cards */}
+        <div className="flex gap-4 shrink-0">
+          {stats.map((stat, index) => (
+            <div key={index} className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm w-32 flex flex-col items-center justify-center h-20">
+               <div className="text-lg font-bold text-slate-800 font-mono">{stat.count}</div>
+               <div className="text-xs text-slate-500 mt-1">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+  
+        {/* Charts Area */}
+        <div className="flex flex-1 gap-4 min-h-0">
+          {/* Left: Bar Chart */}
+          <div className="flex-[2] bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col">
+             <div className="flex justify-between items-center mb-6">
+               <h3 className="text-sm font-bold text-slate-800">资产分类统计</h3>
+               <div className="flex gap-2 text-[11px] text-slate-500">
+                 <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded cursor-pointer">全部</span>
+                 <span className="hover:text-slate-700 cursor-pointer">在用</span>
+                 <span className="hover:text-slate-700 cursor-pointer">闲置</span>
+                 <span className="hover:text-slate-700 cursor-pointer">租赁中</span>
+                 <span className="hover:text-slate-700 cursor-pointer">已报废</span>
+               </div>
+             </div>
+             
+             <div className="flex-1 relative flex items-end pb-8 px-4">
+                {/* Y Axis Grid Lines */}
+                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8 pl-8 pr-4">
+                   {[15, 12, 9, 6, 3, 0].map((val, i) => (
+                     <div key={i} className="w-full border-t border-slate-100 relative h-0">
+                       <span className="absolute -left-8 -top-2 text-[10px] text-slate-400 w-6 text-right font-mono">{val}</span>
+                     </div>
+                   ))}
+                </div>
+  
+                {/* Bars */}
+                <div className="flex justify-around items-end w-full h-full pl-8 z-10">
+                   {barData.map((item, i) => {
+                     const heightPercent = (item.value / 15) * 100;
+                     return (
+                       <div key={i} className="flex flex-col items-center gap-2 group w-1/4">
+                         <div className="text-[10px] text-[#4285F4] font-bold mb-1 opacity-0 group-hover:opacity-100 transition-opacity font-mono">{item.value}</div>
+                         <div 
+                           className="w-4 bg-[#4285F4] rounded-t-sm hover:opacity-90 transition-all relative"
+                           style={{ height: `${heightPercent}%` }}
+                         >
+                            {/* Label on top specifically for screenshot match */}
+                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-[#4285F4] font-bold font-mono">{item.value}</div>
+                         </div>
+                         <div className="text-[11px] text-slate-500 mt-1">{item.name}</div>
+                       </div>
+                     )
+                   })}
+                </div>
+             </div>
+          </div>
+  
+          {/* Right: Pie Chart */}
+          <div className="flex-1 bg-white p-5 rounded-lg border border-slate-200 shadow-sm flex flex-col">
+             <h3 className="text-sm font-bold text-slate-800 mb-4">资产状态分布</h3>
+             <div className="flex-1 flex flex-col items-center justify-center">
+                <div className="relative w-48 h-48">
+                   <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                     {pieSegments.map((seg, i) => (
+                       <circle
+                         key={i}
+                         cx="50"
+                         cy="50"
+                         r="40"
+                         fill="transparent"
+                         stroke={seg.color}
+                         strokeWidth="12"
+                         strokeDasharray={seg.dashArray}
+                         strokeDashoffset="0"
+                         transform={`rotate(${seg.rotate} 50 50)`}
+                       />
+                     ))}
+                   </svg>
+                </div>
+                <div className="flex gap-4 mt-8 flex-wrap justify-center">
+                   {pieData.map((item, i) => (
+                     <div key={i} className="flex items-center gap-1.5">
+                        <div className="w-3 h-2 rounded-[2px]" style={{ backgroundColor: item.color }}></div>
+                        <span className="text-[11px] text-slate-500">{item.name}</span>
+                     </div>
+                   ))}
+                </div>
+             </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="h-screen bg-slate-50 p-4 font-sans text-slate-900 flex flex-col overflow-hidden">
        <NotificationBar />
@@ -524,11 +653,7 @@ const App = () => {
 
        <div className="flex-1 flex flex-col min-h-0">
           {activeTab === '资产管理' ? (
-             assetSubTab === 'ledger' ? renderAssetLedger() : (
-               <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex-1 flex flex-col items-center justify-center text-slate-400">
-                  资产总览图表 - 功能开发中
-               </div>
-             )
+             assetSubTab === 'ledger' ? renderAssetLedger() : renderAssetOverview()
           ) : (
             <div className="bg-white rounded-lg shadow-sm border border-slate-200 flex-1 flex flex-col overflow-hidden">
                 <div className="overflow-auto flex-1">

@@ -48,7 +48,7 @@ const TAB_CONFIGS: Record<TabType, { search: string[], headers: string[], hideTa
   },
   '报销申请': {
     search: ['报销单编号', '公司', '部门', '事项', '申请用户', '申请时间', '入账时间', '状态'],
-    headers: ['报销单编号', '申请时间', '申请人', 'UID', '状态', '公司', '部门', '事项', '金额', '报销凭证', '本金', '佣金', '核销券码/订单编号', '备注', '物品类型', '物品名称', '物品数量', '统一社会信用代码', '订单号', '发票', '进补凭证', '审核时间', '主管审核', '审核意见', '入账时间', '财务审核', '入账意见', '撤销原因', '撤销时间']
+    headers: ['报销单编号', '申请时间', '申请人', '状态', '公司', '部门', '事项', '金额', '报销凭证', '核销券码/订单编号', '备注', '物品类型', '物品名称', '物品数量', '统一社会信用代码', '订单号', '发票', '进补凭证', '审核时间', '主管审核', '审核意见', '入账时间', '财务审核', '入账意见', '撤销原因', '撤销时间']
   },
   '订单垫付': {
     search: ['订单号', '申请人', '补款渠道', '申请时间', '出库时间', '审批状态', '出库状态'],
@@ -105,9 +105,22 @@ const generateRows = (tab: TabType): any[] => {
       else if (h.includes('金额') || h.includes('总收款') || h.includes('业绩')) row[h] = (Math.random() * 5000).toFixed(2);
       else if (h.includes('人') || h.includes('员') || h.includes('出纳') || h.includes('主管') || h.includes('财务')) row[h] = i % 2 === 0 ? '管理员' : '陈清平';
       else if (h.includes('状态')) row[h] = i % 3 === 0 ? '已入账' : (i % 3 === 1 ? '待审批' : '出库成功');
-      else if (h.includes('编号') || h.includes('单号') || h.includes('UID')) row[h] = 'BXD' + (2025121800 + i);
+      else if (h.includes('编号') || h.includes('单号') || h.includes('UID') || h.includes('代码')) row[h] = 'BXD' + (2025121800 + i);
       else if (h === '报销凭证') row[h] = '查看凭证(4)';
       else if (h.includes('发票') || h.includes('凭证')) row[h] = i % 4 === 0 ? '无' : '查看(1)';
+      
+      // 补充缺失的数据逻辑
+      else if (h === '公司') row[h] = ['上海分公司', '北京总部', '深圳研发中心', '广州运营中心'][i % 4];
+      else if (h === '部门') row[h] = ['市场部', '技术部', '人事部', '财务部'][i % 4];
+      else if (h === '事项') row[h] = ['差旅费', '办公采购', '团建费用', '业务招待'][i % 4];
+      else if (h === '备注') row[h] = ['常规报销', '紧急采购', '季度预算', '项目专项'][i % 4];
+      else if (h === '物品类型') row[h] = ['办公耗材', '电子设备', '食品饮料', '交通工具'][i % 4];
+      else if (h === '物品名称') row[h] = ['A4纸/笔', '显示器', '矿泉水', '加油费'][i % 4];
+      else if (h.includes('数量')) row[h] = Math.floor(Math.random() * 50) + 1;
+      else if (h === '统一社会信用代码') row[h] = '91310115MA1' + Math.floor(Math.random() * 100000);
+      else if (h.includes('意见')) row[h] = ['同意', '合规', '请补充材料', '批准'][i % 4];
+      else if (h.includes('原因')) row[h] = '无';
+
       else row[h] = '--';
     });
     return row;
@@ -268,9 +281,9 @@ const DataOverview = ({
       <>
         <div className="flex items-center gap-3 shrink-0 mr-8">
           <div className="w-8 h-8 rounded-full bg-[#1890ff] flex items-center justify-center text-white">
-             <BarChart3 size={16} className="fill-current" />
+             <PieChart size={16} className="fill-current" />
           </div>
-          <span className="text-[15px] font-bold text-slate-800">数据概览</span>
+          <span className="text-[14px] font-bold text-slate-600">数据概览</span>
         </div>
         
         <div className="flex-1 flex items-center gap-6 overflow-x-auto no-scrollbar">
@@ -286,7 +299,7 @@ const DataOverview = ({
           ].map((item, i) => (
             <div key={i} className="flex items-baseline gap-1 whitespace-nowrap">
               <span className="text-[12px] text-slate-500 font-medium">{item.label}</span>
-              <span className="text-[16px] font-bold font-mono" style={{ color: item.color }}>{item.val}</span>
+              <span className="text-[20px] font-bold font-mono" style={{ color: item.color }}>{item.val}</span>
             </div>
           ))}
         </div>
@@ -592,9 +605,13 @@ const App = () => {
                 <thead className="sticky top-0 z-20 bg-slate-50 border-b border-slate-300">
                   <tr className="text-[11px] font-bold text-slate-800 uppercase tracking-wider font-sans">
                     <th className="px-3 py-3 text-center w-14 border-r border-slate-100 whitespace-nowrap">序号</th>
-                    {config.headers.map(h => (
-                      <th key={h} className="px-3 py-3 min-w-[120px] border-r border-slate-100 font-sans whitespace-nowrap">{h}</th>
-                    ))}
+                    {config.headers.map(h => {
+                      const alignCenter = h.includes('金额');
+                      const alignRight = h.includes('收款') || h.includes('业绩') || h.includes('余额');
+                      return (
+                        <th key={h} className={`px-3 py-3 min-w-[120px] border-r border-slate-100 font-sans whitespace-nowrap ${alignRight ? 'text-right' : (alignCenter ? 'text-center' : '')}`}>{h}</th>
+                      )
+                    })}
                     <th className="px-3 py-3 w-32 text-center sticky right-0 bg-slate-50 shadow-[-4px_0_4px_rgba(0,0,0,0.02)] font-sans whitespace-nowrap">操作</th>
                   </tr>
                 </thead>
@@ -607,10 +624,11 @@ const App = () => {
                       <td className="px-3 py-1 text-center border-r border-slate-100 font-mono">{(currentPage - 1) * pageSize + idx + 1}</td>
                       {config.headers.map(h => {
                         const isMonoField = h.includes('时间') || h.includes('日期') || h.includes('金额') || h.includes('编号') || h.includes('单号') || h.includes('UID') || h.includes('代码') || h.includes('数量') || h.includes('收款') || h.includes('业绩') || h.includes('余额') || h === '手机号码';
-                        const alignRight = h.includes('金额') || h.includes('收款') || h.includes('业绩') || h.includes('余额');
+                        const alignRight = h.includes('收款') || h.includes('业绩') || h.includes('余额');
+                        const alignCenter = h.includes('金额');
                         
                         return (
-                          <td key={h} className={`px-3 py-1 border-r border-slate-100 max-w-[200px] ${h !== '报销凭证' ? 'truncate' : ''} ${alignRight ? 'text-right' : ''} ${isMonoField ? 'font-mono' : 'font-sans'}`}>
+                          <td key={h} className={`px-3 py-1 border-r border-slate-100 max-w-[200px] ${h !== '报销凭证' ? 'truncate' : ''} ${alignRight ? 'text-right' : (alignCenter ? 'text-center' : '')} ${isMonoField ? 'font-mono' : 'font-sans'}`}>
                             {h === '报销凭证' ? (
                               <div className="relative group cursor-pointer flex items-center gap-1 text-[#1890ff] font-sans">
                                 <ImageIcon size={14} />

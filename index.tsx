@@ -48,7 +48,7 @@ const TAB_CONFIGS: Record<TabType, { search: string[], headers: string[], hideTa
   },
   '报销申请': {
     search: ['报销单编号', '公司', '部门', '事项', '申请用户', '申请时间', '入账时间', '状态'],
-    headers: ['报销单编号', '申请时间', '申请人', '状态', '公司', '部门', '事项', '金额', '报销凭证', '核销券码/订单编号', '备注', '物品类型', '物品名称', '物品数量', '统一社会信用代码', '订单号', '发票', '进补凭证', '审核时间', '主管审核', '审核意见', '入账时间', '财务审核', '入账意见', '撤销原因', '撤销时间']
+    headers: ['报销单编号', '申请时间', '申请人', '状态', '公司', '部门', '事项', '金额', '报销凭证', '发票', '核销券码/订单编号', '备注', '物品类型', '物品名称', '物品数量', '统一社会信用代码', '订单号', '进补凭证', '审核时间', '主管审核', '审核意见', '入账时间', '财务审核', '入账意见', '撤销原因', '撤销时间']
   },
   '订单垫付': {
     search: ['订单号', '申请人', '补款渠道', '申请时间', '出库时间', '审批状态', '出库状态'],
@@ -557,24 +557,24 @@ const App = () => {
                              const alignCenter = h.includes('金额');
                              const isCompact = activeTab === '报销申请';
                              return (
-                               <td key={h} className={`${isCompact ? 'px-2' : 'px-3'} py-1 border-r border-slate-100 max-w-[200px] ${h !== '报销凭证' ? 'truncate' : ''} ${alignRight ? 'text-right' : (alignCenter ? 'text-center' : '')} ${isMonoField ? 'font-mono' : 'font-sans'}`}>
-                                 {h === '报销凭证' ? (
+                               <td key={h} className={`${isCompact ? 'px-2' : 'px-3'} py-1 border-r border-slate-100 max-w-[200px] ${(h !== '报销凭证' && h !== '发票') ? 'truncate' : ''} ${alignRight ? 'text-right' : (alignCenter ? 'text-center' : '')} ${isMonoField ? 'font-mono' : 'font-sans'}`}>
+                                 {(h === '报销凭证' || h === '发票') ? (
                                    <div className="relative group cursor-pointer flex items-center gap-1 text-[#1890ff] font-sans">
                                      <ImageIcon size={14} />
                                      <span>{row[h]}</span>
                                       <div className={`absolute left-full ml-4 ${idx < 4 ? 'top-0 translate-y-0' : 'top-1/2 -translate-y-1/2'} z-[100] hidden group-hover:block p-4 bg-white border border-slate-200 rounded-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 min-w-[640px]`}>
                                         <div className="mb-3 flex items-center justify-between border-b pb-2 border-slate-100">
                                           <div className="flex flex-col">
-                                            <span className="text-[13px] font-bold text-slate-800 font-sans">报销凭证详情预览</span>
-                                            <span className="text-[10px] text-slate-400 font-mono">单号: {row['报销单编号']}</span>
+                                            <span className="text-[13px] font-bold text-slate-800 font-sans">{h}详情预览</span>
+                                            <span className="text-[10px] text-slate-400 font-mono">单号: {row['报销单编号'] || row['订单号'] || '--'}</span>
                                           </div>
-                                          <div className="bg-blue-50 text-[#1890ff] px-2 py-0.5 rounded text-[10px] font-medium font-sans">共 4 张图片</div>
+                                          <div className="bg-blue-50 text-[#1890ff] px-2 py-0.5 rounded text-[10px] font-medium font-sans">共 {h === '报销凭证' ? '4' : '1'} 张图片</div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3">
                                           {[1, 2, 3, 4].map(num => (
                                             <div key={num} className="relative group/img overflow-hidden rounded-lg border border-slate-100 shadow-sm bg-slate-50 aspect-[4/3]">
                                               <img 
-                                                src={`https://picsum.photos/seed/${idx + 50 + num}/400/300`} 
+                                                src={`https://picsum.photos/seed/${idx + (h==='发票'?100:50) + num}/400/300`} 
                                                 alt={`凭证图片 ${num}`} 
                                                 className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
                                               />

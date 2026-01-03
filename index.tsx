@@ -212,7 +212,7 @@ const TabSelector = ({ activeTab, onSelect }: { activeTab: TabType, onSelect: (t
             key={tab}
             onClick={() => onSelect(tab)}
             className={`
-              h-12 rounded-lg flex items-center justify-center gap-2 text-[13px] font-bold transition-all duration-200 relative overflow-hidden group
+              h-11 rounded-lg flex items-center justify-center gap-2 text-[13px] font-bold transition-all duration-200 relative overflow-hidden group
               ${isActive ? 'shadow-md scale-105 z-10' : 'hover:scale-105 hover:z-10'}
             `}
             style={{
